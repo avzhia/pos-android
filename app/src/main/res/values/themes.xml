@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.POSNaturista" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/g2</item>
+        <item name="colorPrimaryVariant">@color/g1</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/g4</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:colorBackground">@color/bg</item>
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="android:statusBarColor">@color/g1</item>
+        <item name="android:navigationBarColor">@color/card</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="TextAppearance.DM" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+</resources>

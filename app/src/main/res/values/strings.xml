@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">POS Naturista</string>
+    <string name="base_url">https://pos.minube.icu</string>
+    <string name="selecciona_tienda">Tienda</string>
+    <string name="selecciona_cajero">Cajero</string>
+    <string name="fondo_inicial">Fondo inicial *</string>
+    <string name="iniciar_turno">Iniciar turno →</string>
+    <string name="ventas">Ventas</string>
+    <string name="inventario">Inventario</string>
+    <string name="clientes">Clientes</string>
+    <string name="cobrar">Cobrar</string>
+    <string name="confirmar_venta">Confirmar venta</string>
+    <string name="ticket">Ticket</string>
+    <string name="limpiar">Limpiar</string>
+    <string name="efectivo">Efectivo</string>
+    <string name="tarjeta">Tarjeta</string>
+    <string name="transferencia">Transferencia</string>
+    <string name="recibido">Recibido</string>
+    <string name="cambio">Cambio</string>
+    <string name="salir">Salir</string>
+    <string name="cerrar_sesion">¿Cerrar sesión?</string>
+    <string name="turno_abierto">El turno sigue abierto. Ciérralo desde el POS de escritorio.</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="buscar_producto">Buscar producto...</string>
+    <string name="buscar_cliente">Buscar cliente...</string>
+    <string name="escanear">Escanear código</string>
+    <string name="sin_productos">Sin productos</string>
+    <string name="agotado">Agotado</string>
+    <string name="uds">uds</string>
+    <string name="venta_registrada">✓ Venta registrada</string>
+    <string name="error_venta">⚠ Error al registrar venta</string>
+    <string name="producto_agregado">✓ Agregado al ticket</string>
+    <string name="producto_no_encontrado">⚠ Producto no encontrado</string>
+    <string name="sin_camara">⚠ Sin acceso a la cámara</string>
+    <string name="todos">Todos</string>
+    <string name="pin">PIN</string>
+    <string name="pin_incorrecto">⚠ PIN incorrecto</string>
+    <string name="fondo_requerido">⚠ Captura el fondo inicial antes de iniciar</string>
+</resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg">
+
+    <EditText
+        android:id="@+id/et_buscar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="🔍 Buscar producto..."
+        android:textSize="15sp"
+        android:background="@color/card"
+        android:paddingHorizontal="14dp"
+        android:inputType="text"
+        android:singleLine="true"/>
+
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/border"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_inventario"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        android:clipToPadding="false"/>
+
+</LinearLayout>

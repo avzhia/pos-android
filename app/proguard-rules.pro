@@ -1,0 +1,5 @@
+-keep class com.tiendanaturista.pos.data.** { *; }
+-keepattributes Signature
+-keepattributes *Annotation*
+-dontwarn okhttp3.**
+-dontwarn retrofit2.**

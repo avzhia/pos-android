@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="topbar_height">50dp</dimen>
+    <dimen name="bottom_nav_height">62dp</dimen>
+    <dimen name="card_radius">14dp</dimen>
+    <dimen name="btn_radius">12dp</dimen>
+    <dimen name="chip_radius">20dp</dimen>
+    <dimen name="spacing_xs">4dp</dimen>
+    <dimen name="spacing_sm">8dp</dimen>
+    <dimen name="spacing_md">12dp</dimen>
+    <dimen name="spacing_lg">16dp</dimen>
+    <dimen name="spacing_xl">24dp</dimen>
+    <dimen name="fab_size">60dp</dimen>
+    <dimen name="prod_card_min_height">115dp</dimen>
+    <dimen name="text_sm">11sp</dimen>
+    <dimen name="text_md">13sp</dimen>
+    <dimen name="text_lg">15sp</dimen>
+    <dimen name="text_xl">17sp</dimen>
+    <dimen name="text_price">17sp</dimen>
+    <dimen name="text_total">24sp</dimen>
+</resources>
