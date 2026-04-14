@@ -67,7 +67,7 @@
                 android:textSize="12sp"
                 android:backgroundTint="@color/bg"
                 android:textColor="@color/txt2"
-                android:cornerRadius="8dp"/>
+                app:cornerRadius="8dp"/>
         </LinearLayout>
 
         <!-- KPIs -->

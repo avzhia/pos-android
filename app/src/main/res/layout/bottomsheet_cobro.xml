@@ -41,8 +41,8 @@
             android:textSize="13sp"
             android:backgroundTint="@color/g7"
             android:textColor="@color/g1"
-            android:cornerRadius="14dp"
-            android:selected="true"/>
+            app:cornerRadius="14dp"
+            />
 
         <Button
             android:id="@+id/btn_tarjeta"
@@ -54,7 +54,7 @@
             android:textSize="13sp"
             android:backgroundTint="@color/border"
             android:textColor="@color/txt2"
-            android:cornerRadius="14dp"/>
+            app:cornerRadius="14dp"/>
 
         <Button
             android:id="@+id/btn_transfer"
@@ -66,7 +66,7 @@
             android:textSize="13sp"
             android:backgroundTint="@color/border"
             android:textColor="@color/txt2"
-            android:cornerRadius="14dp"/>
+            app:cornerRadius="14dp"/>
     </LinearLayout>
 
     <!-- Recibido -->
@@ -136,7 +136,7 @@
         android:textSize="17sp"
         android:textColor="@color/white"
         android:backgroundTint="@color/g2"
-        android:cornerRadius="14dp"
+        app:cornerRadius="14dp"
         android:layout_marginBottom="16dp"/>
 
 </LinearLayout>
