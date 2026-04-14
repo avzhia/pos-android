@@ -21,13 +21,13 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Dar permisos
-        run: chmod +x gradlew
+      - name: Usar Gradle 8.2 (sin wrapper)
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: 8.2
 
-      - name: Forzar Gradle 8.2 y compilar
-        run: |
-          ./gradlew wrapper --gradle-version 8.2
-          ./gradlew assembleDebug
+      - name: Build APK
+        run: gradle assembleDebug
 
       - name: Subir APK
         uses: actions/upload-artifact@v4
