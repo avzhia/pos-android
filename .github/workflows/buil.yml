@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clonar repo
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Instalar Java
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
@@ -21,11 +21,13 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Permisos gradlew
+      - name: Dar permisos
         run: chmod +x gradlew
 
-      - name: Build APK
-        run: ./gradlew assembleDebug
+      - name: Forzar Gradle 8.2 y compilar
+        run: |
+          ./gradlew wrapper --gradle-version 8.2
+          ./gradlew assembleDebug
 
       - name: Subir APK
         uses: actions/upload-artifact@v4
