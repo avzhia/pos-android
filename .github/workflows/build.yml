@@ -20,23 +20,38 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
 
-      # 3 ── Forzar uso del Gradle Wrapper exacto del proyecto
-      - name: Configurar Gradle
-        uses: gradle/actions/setup-gradle@v3
+      # 3 ── Eliminar Gradle del sistema para que no interfiera con el wrapper
+      - name: Eliminar Gradle del sistema
+        run: |
+          sudo rm -f /usr/bin/gradle
+          sudo rm -rf /usr/share/gradle*
+          sudo rm -rf /opt/gradle*
+          echo "Gradle del sistema eliminado"
+
+      # 4 ── Cache de ~/.gradle para acelerar builds posteriores
+      - name: Cache Gradle
+        uses: actions/cache@v4
         with:
-          gradle-version: wrapper
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: gradle-
 
-      # 4 ── Permisos al wrapper (necesario en Linux)
+      # 5 ── Permisos al wrapper
       - name: Permisos gradlew
         run: chmod +x gradlew
 
-      # 5 ── Compilar APK debug
+      # 6 ── Verificar versión (para confirmar en logs)
+      - name: Verificar versión de Gradle
+        run: ./gradlew --version
+
+      # 7 ── Compilar APK debug
       - name: Build APK debug
         run: ./gradlew assembleDebug --no-daemon --stacktrace
 
-      # 6 ── Subir APK como artefacto descargable
+      # 8 ── Subir APK como artefacto descargable
       - name: Subir APK
         uses: actions/upload-artifact@v4
         with:
