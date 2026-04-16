@@ -1,0 +1,48 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:   # permite ejecutar manualmente desde GitHub → Actions
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1 ── Obtener el código
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      # 2 ── Java 17 (requerido por AGP 8.x)
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # 3 ── Cache de Gradle para acelerar builds posteriores
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: gradle-
+
+      # 4 ── Permisos al wrapper (necesario en Linux)
+      - name: Permisos gradlew
+        run: chmod +x gradlew
+
+      # 5 ── Compilar APK debug
+      - name: Build APK debug
+        run: ./gradlew assembleDebug --stacktrace
+
+      # 6 ── Subir APK como artefacto descargable
+      - name: Subir APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: pos-naturista-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30

@@ -53,7 +53,7 @@
             android:textColor="@color/white"
             android:backgroundTint="#33FFFFFF"
             android:paddingHorizontal="12dp"
-            app:cornerRadius="8dp"/>
+            android:cornerRadius="8dp"/>
     </LinearLayout>
 
     <!-- Fragment container -->

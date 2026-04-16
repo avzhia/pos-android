@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -42,8 +41,8 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
             android:textSize="13sp"
             android:backgroundTint="@color/g7"
             android:textColor="@color/g1"
-            app:cornerRadius="14dp"
-            />
+            android:cornerRadius="14dp"
+            android:selected="true"/>
 
         <Button
             android:id="@+id/btn_tarjeta"
@@ -55,7 +54,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
             android:textSize="13sp"
             android:backgroundTint="@color/border"
             android:textColor="@color/txt2"
-            app:cornerRadius="14dp"/>
+            android:cornerRadius="14dp"/>
 
         <Button
             android:id="@+id/btn_transfer"
@@ -67,7 +66,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
             android:textSize="13sp"
             android:backgroundTint="@color/border"
             android:textColor="@color/txt2"
-            app:cornerRadius="14dp"/>
+            android:cornerRadius="14dp"/>
     </LinearLayout>
 
     <!-- Recibido -->
@@ -137,7 +136,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
         android:textSize="17sp"
         android:textColor="@color/white"
         android:backgroundTint="@color/g2"
-        app:cornerRadius="14dp"
+        android:cornerRadius="14dp"
         android:layout_marginBottom="16dp"/>
 
 </LinearLayout>
