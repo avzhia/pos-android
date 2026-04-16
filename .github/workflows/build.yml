@@ -3,7 +3,7 @@ name: Build APK
 on:
   push:
     branches: [ main, master ]
-  workflow_dispatch:   # permite ejecutar manualmente desde GitHub → Actions
+  workflow_dispatch:
 
 jobs:
   build:
@@ -20,16 +20,13 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: gradle
 
-      # 3 ── Cache de Gradle para acelerar builds posteriores
-      - name: Cache Gradle
-        uses: actions/cache@v4
+      # 3 ── Forzar uso del Gradle Wrapper exacto del proyecto
+      - name: Configurar Gradle
+        uses: gradle/actions/setup-gradle@v3
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: gradle-
+          gradle-version: wrapper
 
       # 4 ── Permisos al wrapper (necesario en Linux)
       - name: Permisos gradlew
@@ -37,7 +34,7 @@ jobs:
 
       # 5 ── Compilar APK debug
       - name: Build APK debug
-        run: ./gradlew assembleDebug --stacktrace
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
 
       # 6 ── Subir APK como artefacto descargable
       - name: Subir APK
