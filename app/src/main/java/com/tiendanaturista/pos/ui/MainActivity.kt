@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun isVentasVisible(): Boolean =
-        !supportFragmentManager.findFragmentByTag("ventas")?.isHidden!!
+        supportFragmentManager.findFragmentByTag("ventas")?.isHidden == false
 
     private fun setupSalir() {
         binding.btnSalir.setOnClickListener {

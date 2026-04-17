@@ -114,7 +114,7 @@ class VentasFragment : Fragment() {
             .setCameraId(0)
             .setBeepEnabled(true)
             .setBarcodeImageEnabled(false)
-            .setOrientationLocked(true)
+            .setOrientationLocked(false)
         scanLauncher.launch(opts)
     }
 
