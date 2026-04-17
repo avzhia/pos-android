@@ -21,15 +21,23 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # 3 ── Eliminar Gradle del sistema para que no interfiera con el wrapper
-      - name: Eliminar Gradle del sistema
+      # 3 ── Instalar Gradle 8.6 del sistema y generar el wrapper.jar
+      - name: Instalar Gradle 8.6 y generar wrapper
         run: |
-          sudo rm -f /usr/bin/gradle
-          sudo rm -rf /usr/share/gradle*
-          sudo rm -rf /opt/gradle*
-          echo "Gradle del sistema eliminado"
+          wget -q "https://services.gradle.org/distributions/gradle-8.6-bin.zip" -O /tmp/gradle.zip
+          unzip -q /tmp/gradle.zip -d /tmp/gradle-dist
+          GRADLE_BIN="/tmp/gradle-dist/gradle-8.6/bin/gradle"
+          chmod +x "$GRADLE_BIN"
+          # Generar gradle-wrapper.jar en el proyecto
+          "$GRADLE_BIN" wrapper --gradle-version 8.6 --distribution-type bin
+          echo "wrapper.jar generado:"
+          ls -lh gradle/wrapper/
 
-      # 4 ── Cache de ~/.gradle para acelerar builds posteriores
+      # 4 ── Permisos al wrapper
+      - name: Permisos gradlew
+        run: chmod +x gradlew
+
+      # 5 ── Cache de ~/.gradle
       - name: Cache Gradle
         uses: actions/cache@v4
         with:
@@ -39,11 +47,7 @@ jobs:
           key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: gradle-
 
-      # 5 ── Permisos al wrapper
-      - name: Permisos gradlew
-        run: chmod +x gradlew
-
-      # 6 ── Verificar versión (para confirmar en logs)
+      # 6 ── Verificar versión de Gradle
       - name: Verificar versión de Gradle
         run: ./gradlew --version
 
