@@ -94,7 +94,8 @@
             android:textColor="@color/white"
             android:textSize="11sp"
             android:textStyle="bold"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:elevation="10dp"/>
     </FrameLayout>
 
     <!-- Bottom Nav -->

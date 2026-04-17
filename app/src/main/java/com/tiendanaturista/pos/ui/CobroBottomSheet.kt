@@ -80,7 +80,7 @@ class CobroBottomSheet : BottomSheetDialogFragment() {
 
         lifecycleScope.launch {
             try {
-                main.api.registrarVenta(VentaRequest(
+                val resp = main.api.registrarVenta(VentaRequest(
                     tiendaId = sesion.tiendaId,
                     cajero = sesion.cajero,
                     formaPago = formaPago,
@@ -95,21 +95,19 @@ class CobroBottomSheet : BottomSheetDialogFragment() {
                         )
                     }
                 ))
-                main.ticket.clear()
-                main.updateFabBadge()
-                main.showToast("✓ Venta registrada")
-                dismiss()
-
-                // Recargar stock
-                val pResp = main.api.getProductos()
-                if (pResp.isSuccessful) {
-                    main.productos = pResp.body()?.filter { it.activo } ?: emptyList()
-                    main.supportFragmentManager.findFragmentByTag("ventas")
-                        ?.let { (it as? com.tiendanaturista.pos.ui.fragments.VentasFragment)?.onProductosLoaded() }
+                if (resp.isSuccessful) {
+                    main.ticket.clear()
+                    main.updateFabBadge()
+                    main.showToast("✓ Venta registrada")
+                    dismiss()
+                    main.recargarProductos()
+                } else {
+                    main.showToast("⚠ Error al registrar venta (${resp.code()})")
+                    _binding?.btnConfirmar?.isEnabled = true
+                    _binding?.btnConfirmar?.text = "✓ Confirmar venta"
                 }
             } catch (e: Exception) {
-                main.showToast("⚠ Error al registrar venta")
-            } finally {
+                main.showToast("⚠ Error de conexión")
                 _binding?.btnConfirmar?.isEnabled = true
                 _binding?.btnConfirmar?.text = "✓ Confirmar venta"
             }

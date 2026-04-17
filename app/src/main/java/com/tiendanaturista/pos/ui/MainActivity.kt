@@ -143,7 +143,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun recargarProductos() {
+        lifecycleScope.launch {
+            try {
+                val pResp = api.getProductos()
+                if (pResp.isSuccessful) {
+                    productos = pResp.body()?.filter { it.activo } ?: emptyList()
+                    ventasFragment.onProductosLoaded()
+                    inventarioFragment.onProductosLoaded()
+                }
+            } catch (e: Exception) { /* silencioso, ya hay stock en memoria */ }
+        }
+    }
+
     fun agregarProd(prod: Producto) {
+        val stockActual = productos.find { it.id == prod.id }?.stockTotal ?: 0
+        val enTicket = ticket.find { it.producto.id == prod.id }?.cantidad ?: 0
+        if (enTicket >= stockActual) {
+            showToast("⚠ Sin stock disponible")
+            return
+        }
         val existing = ticket.find { it.producto.id == prod.id }
         if (existing != null) existing.cantidad++
         else ticket.add(TicketItem(prod))
