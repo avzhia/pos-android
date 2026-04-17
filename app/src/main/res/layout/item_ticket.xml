@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/txt"
             android:textSize="13sp"
-            android:textStyle="medium"
+            android:fontWeight="500"
             android:maxLines="1"
             android:ellipsize="end"/>
 

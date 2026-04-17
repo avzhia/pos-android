@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/txt2"
         android:textSize="13sp"
-        android:textStyle="medium"/>
+        android:fontWeight="500"/>
 
     <TextView
         android:id="@+id/tv_opt_sub"
