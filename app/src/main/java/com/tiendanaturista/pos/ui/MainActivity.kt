@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.tiendanaturista.pos.R
 import com.tiendanaturista.pos.data.*
 import com.tiendanaturista.pos.databinding.ActivityMainBinding
 import com.tiendanaturista.pos.ui.fragments.ClientesFragment

@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.tiendanaturista.pos.R
 import com.tiendanaturista.pos.data.*
 import com.tiendanaturista.pos.databinding.ActivityLoginBinding
 import kotlinx.coroutines.launch
