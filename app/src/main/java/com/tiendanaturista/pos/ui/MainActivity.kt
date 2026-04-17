@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupFab() {
-        binding.fabTicket.setOnClickListener {
+        binding.fabTicketBtn.setOnClickListener {
             if (ticket.isEmpty()) return@setOnClickListener
             val dialog = TicketBottomSheet()
             dialog.show(supportFragmentManager, "ticket")
