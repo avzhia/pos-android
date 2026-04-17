@@ -42,7 +42,7 @@
             android:textSize="13sp"
             android:backgroundTint="@color/g7"
             android:textColor="@color/g1"
-            app:cornerRadius="14dp"
+            app:cornerRadius="14dp"/>
 
         <Button
             android:id="@+id/btn_tarjeta"
