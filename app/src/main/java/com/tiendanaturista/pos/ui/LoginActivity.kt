@@ -120,10 +120,36 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun checkBtn() {
-        val listo = tiendaSel != null && cajeroSel != null
-        binding.btnEntrar.isEnabled = listo
-        // Ocultar advertencia de fondo — se maneja en el flujo de entrar()
-        binding.tvFondoWarn.visibility = View.GONE
+        if (tiendaSel == null || cajeroSel == null) {
+            binding.btnEntrar.isEnabled = false
+            binding.tvFondoWarn.visibility = View.GONE
+            return
+        }
+        lifecycleScope.launch {
+            try {
+                val resp = api.getTurnoActivo(cajeroSel!!.id, tiendaSel!!.id)
+                if (resp.isSuccessful && resp.body()?.activo == true) {
+                    runOnUiThread {
+                        binding.layoutFondo.visibility = View.GONE
+                        binding.tvFondoWarn.visibility = View.GONE
+                        binding.btnEntrar.isEnabled = true
+                    }
+                } else {
+                    runOnUiThread {
+                        binding.layoutFondo.visibility = View.VISIBLE
+                        val listo = binding.etFondo.text.toString().isNotEmpty()
+                        binding.btnEntrar.isEnabled = listo
+                        binding.tvFondoWarn.visibility = View.GONE
+                    }
+                }
+            } catch (e: Exception) {
+                runOnUiThread {
+                    binding.layoutFondo.visibility = View.VISIBLE
+                    val listo = binding.etFondo.text.toString().isNotEmpty()
+                    binding.btnEntrar.isEnabled = listo
+                }
+            }
+        }
     }
 
     private fun setupListeners() {

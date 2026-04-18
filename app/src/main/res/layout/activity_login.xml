@@ -117,6 +117,7 @@
 
             <!-- Fondo -->
             <LinearLayout
+                android:id="@+id/layout_fondo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
