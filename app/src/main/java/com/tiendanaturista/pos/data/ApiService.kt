@@ -40,6 +40,19 @@ interface ApiService {
     @POST("api/ventas")
     suspend fun registrarVenta(@Body venta: VentaRequest): Response<Any>
 
+    // ── Turnos ────────────────────────────────────────────────────────────────
+    @GET("api/turnos/activo")
+    suspend fun getTurnoActivo(
+        @Query("cajero_id") cajeroId: Int,
+        @Query("tienda_id") tiendaId: Int
+    ): Response<TurnoActivoResponse>
+
+    @POST("api/turnos/abrir")
+    suspend fun abrirTurno(@Body turno: AbrirTurnoRequest): Response<TurnoResponse>
+
+    @POST("api/turnos/cerrar/{turno_id}")
+    suspend fun cerrarTurno(@Path("turno_id") turnoId: Int): Response<Any>
+
     companion object {
         private const val BASE_URL = "https://pos.minube.icu/"
 

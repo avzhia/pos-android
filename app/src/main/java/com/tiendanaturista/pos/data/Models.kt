@@ -11,7 +11,30 @@ data class Sesion(
     val tiendaNombre: String,
     val fondoInicial: Double,
     val apertura: String,
-    val negocio: String = "TiendaNaturistaMX"
+    val negocio: String = "TiendaNaturistaMX",
+    val turnoId: Int? = null
+)
+
+// ── Turnos ─────────────────────────────────────────────────────────────────────
+
+data class TurnoActivoResponse(
+    val activo: Boolean,
+    @SerializedName("turno_id") val turnoId: Int? = null,
+    @SerializedName("fondo_inicial") val fondoInicial: Double? = null,
+    @SerializedName("fecha_apertura") val fechaApertura: String? = null
+)
+
+data class AbrirTurnoRequest(
+    @SerializedName("cajero_id") val cajeroId: Int,
+    @SerializedName("tienda_id") val tiendaId: Int,
+    @SerializedName("fondo_inicial") val fondoInicial: Double
+)
+
+data class TurnoResponse(
+    val ok: Boolean,
+    @SerializedName("turno_id") val turnoId: Int,
+    @SerializedName("fondo_inicial") val fondoInicial: Double,
+    @SerializedName("fecha_apertura") val fechaApertura: String
 )
 
 // ── Tiendas y Cajeros ──────────────────────────────────────────────────────────

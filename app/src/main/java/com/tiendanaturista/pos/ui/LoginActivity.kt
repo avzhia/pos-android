@@ -120,11 +120,10 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun checkBtn() {
-        val fondoOk = binding.etFondo.text.toString().isNotEmpty()
-        val listo = tiendaSel != null && cajeroSel != null && fondoOk
+        val listo = tiendaSel != null && cajeroSel != null
         binding.btnEntrar.isEnabled = listo
-        binding.tvFondoWarn.visibility =
-            if (cajeroSel != null && !fondoOk) View.VISIBLE else View.GONE
+        // Ocultar advertencia de fondo — se maneja en el flujo de entrar()
+        binding.tvFondoWarn.visibility = View.GONE
     }
 
     private fun setupListeners() {
@@ -138,7 +137,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun entrar() {
-        val fondo = binding.etFondo.text.toString().toDoubleOrNull() ?: 0.0
         val pin = binding.etPin.text.toString().trim()
 
         if (cajeroSel?.tienePin == true) {
@@ -146,7 +144,7 @@ class LoginActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 try {
                     val res = api.verificarPin(cajeroSel!!.id, pin)
-                    if (res.isSuccessful && res.body()?.ok == true) guardarYEntrar(fondo)
+                    if (res.isSuccessful && res.body()?.ok == true) consultarTurnoYEntrar()
                     else {
                         binding.tvPinError.visibility = View.VISIBLE
                         binding.etPin.text?.clear()
@@ -156,19 +154,61 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         } else {
-            guardarYEntrar(fondo)
+            lifecycleScope.launch { consultarTurnoYEntrar() }
         }
     }
 
-    private fun guardarYEntrar(fondo: Double) {
+    private suspend fun consultarTurnoYEntrar() {
+        try {
+            val turnoResp = api.getTurnoActivo(cajeroSel!!.id, tiendaSel!!.id)
+            if (turnoResp.isSuccessful && turnoResp.body()?.activo == true) {
+                // Turno activo — entrar directo con datos del backend
+                val turno = turnoResp.body()!!
+                guardarYEntrar(
+                    fondo = turno.fondoInicial ?: 0.0,
+                    apertura = turno.fechaApertura ?: Instant.now().toString(),
+                    turnoId = turno.turnoId
+                )
+            } else {
+                // Sin turno activo — verificar fondo ingresado
+                val fondo = binding.etFondo.text.toString().toDoubleOrNull()
+                if (fondo == null) {
+                    runOnUiThread {
+                        binding.tvFondoWarn.visibility = View.VISIBLE
+                        binding.etFondo.requestFocus()
+                    }
+                    return
+                }
+                // Abrir turno nuevo
+                val nuevoTurno = api.abrirTurno(AbrirTurnoRequest(cajeroSel!!.id, tiendaSel!!.id, fondo))
+                if (nuevoTurno.isSuccessful && nuevoTurno.body() != null) {
+                    val t = nuevoTurno.body()!!
+                    guardarYEntrar(fondo = fondo, apertura = t.fechaApertura, turnoId = t.turnoId)
+                } else {
+                    guardarYEntrar(fondo = fondo, apertura = Instant.now().toString(), turnoId = null)
+                }
+            }
+        } catch (e: Exception) {
+            // Error de red — pedir fondo manualmente
+            val fondo = binding.etFondo.text.toString().toDoubleOrNull()
+            if (fondo == null) {
+                runOnUiThread { binding.tvFondoWarn.visibility = View.VISIBLE }
+                return
+            }
+            guardarYEntrar(fondo = fondo, apertura = Instant.now().toString(), turnoId = null)
+        }
+    }
+
+    private fun guardarYEntrar(fondo: Double, apertura: String, turnoId: Int?) {
         session.guardar(Sesion(
             cajero = cajeroSel!!.nombre,
             cajeroId = cajeroSel!!.id,
             tiendaId = tiendaSel!!.id,
             tiendaNombre = tiendaSel!!.nombre,
             fondoInicial = fondo,
-            apertura = Instant.now().toString(),
-            negocio = binding.tvNegocio.text.toString().replace("🌿 ", "")
+            apertura = apertura,
+            negocio = binding.tvNegocio.text.toString().replace("🌿 ", ""),
+            turnoId = turnoId
         ))
         goMain()
     }
