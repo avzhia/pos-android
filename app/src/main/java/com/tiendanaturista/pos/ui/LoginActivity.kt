@@ -16,7 +16,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var session: SessionManager
-    private val api = ApiService.create(this)
+    private val api = ApiService.createFromPrefs(this)
 
     private var tiendas: List<Tienda> = emptyList()
     private var cajeros: List<Cajero> = emptyList()

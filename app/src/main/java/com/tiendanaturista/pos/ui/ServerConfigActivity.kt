@@ -1,12 +1,12 @@
 package com.tiendanaturista.pos.ui
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.tiendanaturista.pos.data.ApiService
+import com.tiendanaturista.pos.data.ServerPrefs
 import com.tiendanaturista.pos.databinding.ActivityServerConfigBinding
 import kotlinx.coroutines.launch
 
@@ -16,17 +16,16 @@ class ServerConfigActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityServerConfigBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        // Mostrar URL guardada si ya existe
-        val urlGuardada = getServerUrl(this)
-        if (urlGuardada.isNotEmpty()) {
-            binding.etServerUrl.setText(urlGuardada)
-        } else {
-            binding.etServerUrl.setText("http://")
+        // Si ya hay URL guardada, ir directo al login
+        if (ServerPrefs.hasUrl(this)) {
+            goLogin()
+            return
         }
 
+        binding = ActivityServerConfigBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.etServerUrl.setText("http://")
         binding.btnGuardar.setOnClickListener { guardarYVerificar() }
     }
 
@@ -49,24 +48,27 @@ class ServerConfigActivity : AppCompatActivity() {
                 val api = ApiService.create(finalUrl)
                 val resp = api.getConfig("nombre_negocio")
                 if (resp.isSuccessful) {
-                    saveServerUrl(this@ServerConfigActivity, finalUrl)
+                    ServerPrefs.saveUrl(this@ServerConfigActivity, finalUrl)
                     Toast.makeText(
                         this@ServerConfigActivity,
                         "✓ Conectado a ${resp.body()?.valor ?: "servidor"}",
                         Toast.LENGTH_SHORT
                     ).show()
-                    startActivity(Intent(this@ServerConfigActivity, LoginActivity::class.java))
-                    finish()
+                    goLogin()
                 } else {
                     runOnUiThread {
-                        Toast.makeText(this@ServerConfigActivity, "⚠ Servidor encontrado pero respondió con error (${resp.code()})", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@ServerConfigActivity,
+                            "⚠ Servidor respondió con error (${resp.code()})",
+                            Toast.LENGTH_LONG).show()
                         binding.btnGuardar.isEnabled = true
                         binding.btnGuardar.text = "Guardar y conectar"
                     }
                 }
             } catch (e: Exception) {
                 runOnUiThread {
-                    Toast.makeText(this@ServerConfigActivity, "⚠ No se pudo conectar. Verifica la URL y que el servidor esté encendido.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@ServerConfigActivity,
+                        "⚠ No se pudo conectar. Verifica la URL y que el servidor esté encendido.",
+                        Toast.LENGTH_LONG).show()
                     binding.btnGuardar.isEnabled = true
                     binding.btnGuardar.text = "Guardar y conectar"
                 }
@@ -74,23 +76,8 @@ class ServerConfigActivity : AppCompatActivity() {
         }
     }
 
-    companion object {
-        private const val PREFS = "pos_server_prefs"
-        private const val KEY_URL = "server_url"
-
-        fun getServerUrl(context: Context): String {
-            return context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-                .getString(KEY_URL, "") ?: ""
-        }
-
-        fun saveServerUrl(context: Context, url: String) {
-            context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-                .edit().putString(KEY_URL, url).apply()
-        }
-
-        fun clearServerUrl(context: Context) {
-            context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-                .edit().remove(KEY_URL).apply()
-        }
+    private fun goLogin() {
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 }

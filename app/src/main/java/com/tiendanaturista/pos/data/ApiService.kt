@@ -1,6 +1,5 @@
 package com.tiendanaturista.pos.data
 
-import android.content.Context
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -64,9 +63,8 @@ interface ApiService {
                 .create(ApiService::class.java)
         }
 
-        fun create(context: Context): ApiService {
-            val url = ServerConfigActivity.getServerUrl(context)
-                .ifEmpty { "http://localhost:8001" }
+        fun createFromPrefs(context: android.content.Context): ApiService {
+            val url = ServerPrefs.getUrl(context)
             return create(url)
         }
     }

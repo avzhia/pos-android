@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     lateinit var session: SessionManager
-    val api = ApiService.create(this)
+    val api = ApiService.createFromPrefs(this)
 
     val ticket = mutableListOf<TicketItem>()
     var productos: List<Producto> = emptyList()
