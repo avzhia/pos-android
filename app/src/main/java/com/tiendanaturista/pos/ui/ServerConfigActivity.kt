@@ -1,5 +1,6 @@
 package com.tiendanaturista.pos.ui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -17,15 +18,23 @@ class ServerConfigActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Si ya hay URL guardada, ir directo al login
-        if (ServerPrefs.hasUrl(this)) {
-            goLogin()
+        // Verificar si ya hay URL guardada
+        val urlGuardada = ServerPrefs.getUrl(this)
+        if (urlGuardada.isNotEmpty() && urlGuardada != "http://192.168.3.210:8001") {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
             return
         }
 
         binding = ActivityServerConfigBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.etServerUrl.setText("http://")
+
+        if (urlGuardada.isNotEmpty()) {
+            binding.etServerUrl.setText(urlGuardada)
+        } else {
+            binding.etServerUrl.setText("http://")
+        }
+
         binding.btnGuardar.setOnClickListener { guardarYVerificar() }
     }
 
@@ -48,14 +57,29 @@ class ServerConfigActivity : AppCompatActivity() {
                 val api = ApiService.create(finalUrl)
                 val resp = api.getConfig("nombre_negocio")
                 if (resp.isSuccessful) {
+                    // Guardar URL antes de navegar
                     ServerPrefs.saveUrl(this@ServerConfigActivity, finalUrl)
+                    
+                    // Verificar que se guardó
+                    val guardada = ServerPrefs.getUrl(this@ServerConfigActivity)
+                    
                     runOnUiThread {
                         Toast.makeText(
                             this@ServerConfigActivity,
                             "✓ Conectado a ${resp.body()?.valor ?: "servidor"}",
-                            Toast.LENGTH_SHORT
+                            Toast.LENGTH_LONG
                         ).show()
-                        goLogin()
+                        
+                        if (guardada == finalUrl) {
+                            val intent = Intent(this@ServerConfigActivity, LoginActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            Toast.makeText(this@ServerConfigActivity, "⚠ Error al guardar configuración", Toast.LENGTH_LONG).show()
+                            binding.btnGuardar.isEnabled = true
+                            binding.btnGuardar.text = "Guardar y conectar"
+                        }
                     }
                 } else {
                     runOnUiThread {
@@ -69,18 +93,12 @@ class ServerConfigActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 runOnUiThread {
                     Toast.makeText(this@ServerConfigActivity,
-                        "⚠ No se pudo conectar. Verifica la URL y que el servidor esté encendido.",
+                        "⚠ No se pudo conectar: ${e.message}",
                         Toast.LENGTH_LONG).show()
                     binding.btnGuardar.isEnabled = true
                     binding.btnGuardar.text = "Guardar y conectar"
                 }
             }
         }
-    }
-
-    private fun goLogin() {
-        val intent = Intent(this, LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
     }
 }
