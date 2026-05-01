@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     lateinit var session: SessionManager
-    val api = ApiService.createFromPrefs(this)
+    lateinit var api: ApiService
 
     val ticket = mutableListOf<TicketItem>()
     var productos: List<Producto> = emptyList()
@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        api = ApiService.createFromPrefs(this)
         session = SessionManager(this)
         val sesion = session.cargar() ?: run { goLogin(); return }
 

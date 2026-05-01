@@ -7,15 +7,12 @@ import retrofit2.http.*
 
 interface ApiService {
 
-    // ── Config ──────────────────────────────────────────────────────────────
     @GET("api/admin/config/{clave}")
     suspend fun getConfig(@Path("clave") clave: String): Response<ConfigResponse>
 
-    // ── Tiendas ─────────────────────────────────────────────────────────────
     @GET("api/tiendas")
     suspend fun getTiendas(): Response<List<Tienda>>
 
-    // ── Cajeros ─────────────────────────────────────────────────────────────
     @GET("api/cajeros")
     suspend fun getCajeros(): Response<List<Cajero>>
 
@@ -25,22 +22,18 @@ interface ApiService {
         @Query("pin") pin: String
     ): Response<VerificarPinResponse>
 
-    // ── Productos ────────────────────────────────────────────────────────────
     @GET("api/productos")
     suspend fun getProductos(): Response<List<Producto>>
 
-    // ── Clientes ─────────────────────────────────────────────────────────────
     @GET("api/clientes")
     suspend fun getClientes(): Response<List<Cliente>>
 
     @GET("api/clientes/{id}/ventas")
     suspend fun getVentasCliente(@Path("id") id: Int): Response<List<VentaHistorial>>
 
-    // ── Ventas ────────────────────────────────────────────────────────────────
     @POST("api/ventas")
     suspend fun registrarVenta(@Body venta: VentaRequest): Response<Any>
 
-    // ── Turnos ────────────────────────────────────────────────────────────────
     @GET("api/turnos/activo")
     suspend fun getTurnoActivo(
         @Query("cajero_id") cajeroId: Int,
@@ -65,7 +58,10 @@ interface ApiService {
 
         fun createFromPrefs(context: android.content.Context): ApiService {
             val url = ServerPrefs.getUrl(context)
-            return create(url)
+            // Si no hay URL guardada usar fallback — no debería ocurrir porque
+            // ServerConfigActivity siempre pide la URL antes de ir al login
+            val safeUrl = if (url.isEmpty()) "http://localhost:8001" else url
+            return create(safeUrl)
         }
     }
 }

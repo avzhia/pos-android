@@ -16,7 +16,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var session: SessionManager
-    private val api = ApiService.createFromPrefs(this)
+    private lateinit var api: ApiService
 
     private var tiendas: List<Tienda> = emptyList()
     private var cajeros: List<Cajero> = emptyList()
@@ -33,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
+        api = ApiService.createFromPrefs(this)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
