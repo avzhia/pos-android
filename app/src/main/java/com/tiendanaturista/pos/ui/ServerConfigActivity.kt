@@ -20,7 +20,7 @@ class ServerConfigActivity : AppCompatActivity() {
 
         // Verificar si ya hay URL guardada
         val urlGuardada = ServerPrefs.getUrl(this)
-        if (urlGuardada.isNotEmpty() && urlGuardada != "http://192.168.3.210:8001") {
+        if (urlGuardada.isNotEmpty()) {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
             return
