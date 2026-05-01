@@ -30,11 +30,12 @@ data class AbrirTurnoRequest(
     @SerializedName("fondo_inicial") val fondoInicial: Double
 )
 
+// Backend devuelve: {"turno_id": ..., "fecha_apertura": ...}
 data class TurnoResponse(
-    val ok: Boolean,
     @SerializedName("turno_id") val turnoId: Int,
-    @SerializedName("fondo_inicial") val fondoInicial: Double,
-    @SerializedName("fecha_apertura") val fechaApertura: String
+    @SerializedName("fecha_apertura") val fechaApertura: String,
+    val ok: Boolean = true,
+    @SerializedName("fondo_inicial") val fondoInicial: Double = 0.0
 )
 
 // ── Tiendas y Cajeros ──────────────────────────────────────────────────────────
@@ -60,11 +61,15 @@ data class VerificarPinResponse(val ok: Boolean)
 
 data class Lote(
     val id: Int,
+    @SerializedName("producto_id") val productoId: Int = 0,
     @SerializedName("numero_lote") val numeroLote: String,
     val stock: Int,
     @SerializedName("costo_unitario") val costoUnitario: Double = 0.0,
     val caduca: Boolean = true,
-    @SerializedName("fecha_caducidad") val fechaCaducidad: String? = null
+    @SerializedName("fecha_caducidad") val fechaCaducidad: String? = null,
+    @SerializedName("fecha_entrada") val fechaEntrada: String? = null,
+    @SerializedName("proveedor_id") val proveedorId: Int? = null,
+    @SerializedName("proveedor_nombre") val proveedorNombre: String? = null
 )
 
 data class Producto(
@@ -76,6 +81,8 @@ data class Producto(
     @SerializedName("stock_min") val stockMin: Int = 5,
     val activo: Boolean = true,
     @SerializedName("codigo_barras") val codigoBarras: String? = null,
+    val marca: String = "",
+    @SerializedName("url_ecommerce") val urlEcommerce: String? = null,
     val lotes: List<Lote> = emptyList()
 ) {
     val stockTotal: Int get() = lotes.filter { it.numeroLote != "DEV" }.sumOf { it.stock }
@@ -96,18 +103,22 @@ data class Cliente(
     @SerializedName("total_gastado") val totalGastado: Double = 0.0
 )
 
+// Backend devuelve campos completos de venta — mapeamos lo necesario
 data class VentaHistorial(
     val id: Int,
     val fecha: String,
     val total: Double,
     @SerializedName("forma_pago") val formaPago: String,
+    val cajero: String = "",
+    @SerializedName("tienda_nombre") val tiendaNombre: String = "",
     val items: List<ItemHistorial> = emptyList()
 )
 
 data class ItemHistorial(
-    val nombre: String,
+    @SerializedName("nombre_prod") val nombre: String = "",
     val cantidad: Int,
-    val precio: Double
+    @SerializedName("precio_unit") val precio: Double = 0.0,
+    val subtotal: Double = 0.0
 )
 
 // ── Ventas ─────────────────────────────────────────────────────────────────────
