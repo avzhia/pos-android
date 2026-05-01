@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:padding="32dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🌿"
+            android:textSize="48sp"
+            android:layout_marginTop="32dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="POS Naturista"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/g2"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Configuración del servidor"
+            android:textSize="14sp"
+            android:textColor="@color/txt3"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="40dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="URL del servidor"
+            android:textSize="13sp"
+            android:textColor="@color/txt2"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp" />
+
+        <EditText
+            android:id="@+id/et_server_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ej: http://192.168.3.210:8001"
+            android:inputType="textUri"
+            android:textSize="15sp"
+            android:padding="14dp"
+            android:background="@drawable/bg_input"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="• Red local: http://192.168.x.x:8001\n• Internet: https://tudominio.com"
+            android:textSize="12sp"
+            android:textColor="@color/txt3"
+            android:layout_marginBottom="32dp" />
+
+        <Button
+            android:id="@+id/btn_guardar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Guardar y conectar"
+            android:textSize="15sp"
+            android:backgroundTint="@color/g2"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+</ScrollView>

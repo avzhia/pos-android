@@ -1,5 +1,6 @@
 package com.tiendanaturista.pos.data
 
+import android.content.Context
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -54,14 +55,19 @@ interface ApiService {
     suspend fun cerrarTurno(@Path("turno_id") turnoId: Int): Response<Any>
 
     companion object {
-        private const val BASE_URL = "https://pos.minube.icu/"
-
-        fun create(): ApiService {
+        fun create(baseUrl: String): ApiService {
+            val url = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
             return Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(ApiService::class.java)
+        }
+
+        fun create(context: Context): ApiService {
+            val url = ServerConfigActivity.getServerUrl(context)
+                .ifEmpty { "http://localhost:8001" }
+            return create(url)
         }
     }
 }
