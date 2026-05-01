@@ -49,12 +49,14 @@ class ServerConfigActivity : AppCompatActivity() {
                 val resp = api.getConfig("nombre_negocio")
                 if (resp.isSuccessful) {
                     ServerPrefs.saveUrl(this@ServerConfigActivity, finalUrl)
-                    Toast.makeText(
-                        this@ServerConfigActivity,
-                        "✓ Conectado a ${resp.body()?.valor ?: "servidor"}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    goLogin()
+                    runOnUiThread {
+                        Toast.makeText(
+                            this@ServerConfigActivity,
+                            "✓ Conectado a ${resp.body()?.valor ?: "servidor"}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        goLogin()
+                    }
                 } else {
                     runOnUiThread {
                         Toast.makeText(this@ServerConfigActivity,
