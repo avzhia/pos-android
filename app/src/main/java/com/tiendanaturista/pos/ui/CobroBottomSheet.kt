@@ -74,12 +74,28 @@ class CobroBottomSheet : BottomSheetDialogFragment() {
 
     private fun confirmarVenta(main: MainActivity, total: Double) {
         binding.btnConfirmar.isEnabled = false
-        binding.btnConfirmar.text = "Procesando..."
+        binding.btnConfirmar.text = "Verificando turno..."
 
         val sesion = main.session.cargar() ?: return
 
         lifecycleScope.launch {
             try {
+                // Verificar que el turno sigue activo antes de registrar la venta
+                val turnoResp = main.api.getTurnoActivo(
+                    cajeroId = sesion.cajeroId,
+                    tiendaId = sesion.tiendaId
+                )
+
+                if (!turnoResp.isSuccessful || turnoResp.body()?.activo != true) {
+                    main.showToast("⚠ El turno fue cerrado. Inicia un nuevo turno para continuar.")
+                    _binding?.btnConfirmar?.isEnabled = true
+                    _binding?.btnConfirmar?.text = "✓ Confirmar venta"
+                    return@launch
+                }
+
+                // Turno activo confirmado — registrar la venta
+                _binding?.btnConfirmar?.text = "Procesando..."
+
                 val resp = main.api.registrarVenta(VentaRequest(
                     tiendaId = sesion.tiendaId,
                     cajero = sesion.cajero,
