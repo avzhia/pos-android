@@ -80,9 +80,15 @@ class VentasFragment : Fragment() {
         val main = activity as? MainActivity ?: return
         if (_binding == null) return
 
+        // Si la categoría seleccionada ya no existe en los nuevos productos, resetear
+        val categorias = main.productos.map { it.categoria }.distinct().sorted()
+        if (catSel.isNotEmpty() && catSel != "Todos" && catSel !in categorias) {
+            catSel = ""
+        }
+
         // Cargar categorías
-        val cats = listOf("Todos") + main.productos.map { it.categoria }.distinct().sorted()
-        catAdapter.submitList(cats.map { Pair(it, it == "Todos" || it == catSel) })
+        val cats = listOf("Todos") + categorias
+        catAdapter.submitList(cats.map { Pair(it, (it == "Todos" && catSel.isEmpty()) || it == catSel) })
 
         filtrar()
     }

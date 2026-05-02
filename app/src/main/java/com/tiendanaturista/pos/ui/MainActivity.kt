@@ -134,12 +134,19 @@ class MainActivity : AppCompatActivity() {
             try {
                 val pResp = api.getProductos()
                 if (pResp.isSuccessful) {
-                    productos = pResp.body()?.filter { it.activo } ?: emptyList()
-                    ventasFragment.onProductosLoaded()
-                    inventarioFragment.onProductosLoaded()
+                    productos = pResp.body() ?: emptyList()
+                    // Esperar a que los fragmentos estén adjuntos al window
+                    binding.root.post {
+                        ventasFragment.onProductosLoaded()
+                        inventarioFragment.onProductosLoaded()
+                    }
+                } else {
+                    Toast.makeText(this@MainActivity,
+                        "⚠ Error del servidor: ${pResp.code()}", Toast.LENGTH_LONG).show()
                 }
             } catch (e: Exception) {
-                Toast.makeText(this@MainActivity, "⚠ Error al cargar productos", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity,
+                    "⚠ No se pudo conectar al servidor: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -149,11 +156,13 @@ class MainActivity : AppCompatActivity() {
             try {
                 val pResp = api.getProductos()
                 if (pResp.isSuccessful) {
-                    productos = pResp.body()?.filter { it.activo } ?: emptyList()
-                    ventasFragment.onProductosLoaded()
-                    inventarioFragment.onProductosLoaded()
+                    productos = pResp.body() ?: emptyList()
+                    binding.root.post {
+                        ventasFragment.onProductosLoaded()
+                        inventarioFragment.onProductosLoaded()
+                    }
                 }
-            } catch (e: Exception) { /* silencioso, ya hay stock en memoria */ }
+            } catch (e: Exception) { /* silencioso, hay stock en memoria */ }
         }
     }
 
